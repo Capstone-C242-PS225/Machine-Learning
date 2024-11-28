@@ -1,7 +1,6 @@
 import os
 import json
 
-# Fungsi untuk mengekstrak fitur penting dari satu objek JSON
 def extract_important_features(data):
     try:
         return {
@@ -50,7 +49,6 @@ def extract_important_features(data):
             "companyBank": {"accountName": None, "accountNumber": None, "totalCashout": None, "totalBalance": None}
         }
 
-# Fungsi untuk memproses banyak file JSON
 def process_multiple_json_files(input_folder, output_file):
     all_processed_data = []
 
@@ -61,33 +59,32 @@ def process_multiple_json_files(input_folder, output_file):
                 with open(file_path, 'r') as f:
                     data = json.load(f)
 
-                    # Jika data adalah list, iterasi setiap elemen list
                     if isinstance(data, list):
                         for item in data:
                             processed_data = extract_important_features(item)
                             all_processed_data.append(processed_data)
-                    # Jika data adalah dictionary, langsung proses
+   
                     elif isinstance(data, dict):
                         processed_data = extract_important_features(data)
                         all_processed_data.append(processed_data)
                     else:
-                        # Tambahkan data kosong jika tipe data tidak sesuai
+    
                         all_processed_data.append(extract_important_features({}))
 
             except Exception as e:
                 print(f"Error processing file {file_name}: {e}")
                 all_processed_data.append(extract_important_features({}))
 
-    # Simpan hasil ke file JSON
+
     with open(output_file, 'w') as outfile:
         json.dump(all_processed_data, outfile, indent=4)
 
 
-# Lokasi folder input dan file output
-input_folder = "/."  # Ganti dengan path folder JSON kamu
-output_file = "processed_data.json"  # Nama file JSON hasil output
 
-# Proses semua file JSON
-process_multiple_json_files("./Dataset Judol/apibet88-Indonesian-Online-Gambling-Site-apikbet88-Deposit-Database-2022-09-04-0YMuWsVa", output_file)
+input_folder = "/." 
+output_file = "processed_data.json" 
+
+
+process_multiple_json_files("", output_file)
 
 print(f"Semua data telah diproses dan disimpan di {output_file}")

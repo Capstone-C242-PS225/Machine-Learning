@@ -2,7 +2,7 @@ import os
 import json
 import pandas as pd
 
-# Fungsi untuk mengekstrak data relevan untuk klasifikasi tingkat kecanduan pejudi
+
 def extract_gambling_features(data):
     try:
         return {
@@ -16,7 +16,7 @@ def extract_gambling_features(data):
             "company_total_balance": data.get("companyBank", {}).get("totalBalance", 0)
         }
     except Exception:
-        # Kembalikan data kosong jika terjadi error
+
         return {
             "user_email": None,
             "transaction_amount": 0,
@@ -27,8 +27,6 @@ def extract_gambling_features(data):
             "company_total_cashout": 0,
             "company_total_balance": 0
         }
-
-# Fungsi untuk memproses banyak file JSON dan menyimpannya dalam file tabular
 def process_json_to_tabular(input_folder, output_file):
     all_processed_data = []
 
@@ -39,12 +37,12 @@ def process_json_to_tabular(input_folder, output_file):
                 with open(file_path, 'r') as f:
                     data = json.load(f)
 
-                    # Jika data adalah list, iterasi setiap elemen list
+      
                     if isinstance(data, list):
                         for item in data:
                             processed_data = extract_gambling_features(item)
                             all_processed_data.append(processed_data)
-                    # Jika data adalah dictionary, langsung proses
+         
                     elif isinstance(data, dict):
                         processed_data = extract_gambling_features(data)
                         all_processed_data.append(processed_data)
@@ -53,13 +51,12 @@ def process_json_to_tabular(input_folder, output_file):
                 print(f"Error processing file {file_name}: {e}")
                 all_processed_data.append(extract_gambling_features({}))
 
-    # Simpan hasil ke dalam file tabular CSV menggunakan pandas
+
     df = pd.DataFrame(all_processed_data)
     df.to_csv(output_file, index=False)
 
-# Lokasi folder input JSON dan output CSV
-input_folder = "."  # Ganti dengan path folder JSON kamu
-output_csv = "tabulated_gambling_data.csv"  # Nama file CSV hasil output
 
-# Proses semua file JSON dan simpan ke CSV
+input_folder = "."  
+output_csv = "tabulated_gambling_data.csv" 
+
 process_json_to_tabular(input_folder, output_csv)
