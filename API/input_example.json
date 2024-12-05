@@ -1,0 +1,7 @@
+{
+    "newRegister": 1,  
+    "transaction_amount": 250000,  
+    "user_total_cashout": 1500000,  
+    "company_total_cashout": 2000000, 
+    "user_total_balance": -500000  
+}
