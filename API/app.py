@@ -24,6 +24,14 @@ def classify(cluster):
     else:
         return 'sangat berat'
 
+def calculate_company_total_balance(transaction_amount, user_total_cashout, user_total_balance, company_total_cashout):
+        company_balance_model = joblib.load('linear_regression_model.pkl')
+        pred_data = np.array([[transaction_amount, user_total_cashout, user_total_balance, company_total_cashout]])
+        scaler = joblib.load('company_total_balance_scaler.pkl')
+        scaled_data = scaler.transform(pred_data)
+        company_total_balance = company_balance_model.predict(scaled_data)
+        return float(company_total_balance)
+
 @app.route('/predict', methods=['POST'])
 def predict():
 
@@ -37,7 +45,8 @@ def predict():
     try:
         company_total_balance_estimate = data['company_total_balance']
     except:
-        company_total_balance_estimate = 10 * user_total_balance
+        company_total_balance_estimate = calculate_company_total_balance(transaction_amount, user_total_cashout, user_total_balance, company_total_cashout)
+        
     data_to_predict = np.array([[newRegister, transaction_amount, user_total_cashout, 
                                  user_total_balance, company_total_cashout, company_total_balance_estimate, status_SUCCESS]])
     
