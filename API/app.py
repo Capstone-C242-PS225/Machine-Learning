@@ -12,7 +12,7 @@ tf.random.set_seed(SEED)
 
 app = Flask(__name__)
 
-model = tf.keras.models.load_model('addiction_predict.h5')
+model = tf.keras.models.load_model('API/model/addiction_predict.h5')
 
 def classify(cluster):
     if cluster == 0:
@@ -25,9 +25,9 @@ def classify(cluster):
         return 'sangat berat'
 
 def calculate_company_total_balance(transaction_amount, user_total_cashout, user_total_balance, company_total_cashout):
-        company_balance_model = joblib.load('linear_regression_model.pkl')
+        company_balance_model = joblib.load('API/model/linear_regression_model.pkl')
         pred_data = np.array([[transaction_amount, user_total_cashout, user_total_balance, company_total_cashout]])
-        scaler = joblib.load('company_total_balance_scaler.pkl')
+        scaler = joblib.load('API/model/company_total_balance_scaler.pkl')
         scaled_data = scaler.transform(pred_data)
         company_total_balance = company_balance_model.predict(scaled_data)
         return float(company_total_balance)
@@ -50,10 +50,10 @@ def predict():
     data_to_predict = np.array([[newRegister, transaction_amount, user_total_cashout, 
                                  user_total_balance, company_total_cashout, company_total_balance_estimate, status_SUCCESS]])
     
-    scaler1 = joblib.load('scaler_standard.pkl')
+    scaler1 = joblib.load('API/model//scaler_standard.pkl')
     scaled_data1 = scaler1.transform(data_to_predict)  
 
-    scaler2 =joblib.load('scaler_minmax.pkl')
+    scaler2 =joblib.load('API/model//scaler_minmax.pkl')
     scaled_data2 = scaler2.transform(scaled_data1)
 
     input_data = np.array(scaled_data2)
@@ -70,4 +70,4 @@ def predict():
     return jsonify(result)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
