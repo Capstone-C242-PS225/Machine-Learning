@@ -50,10 +50,10 @@ def predict():
     data_to_predict = np.array([[newRegister, transaction_amount, user_total_cashout, 
                                  user_total_balance, company_total_cashout, company_total_balance_estimate, status_SUCCESS]])
     
-    scaler1 = joblib.load('model//scaler_standard.pkl')
+    scaler1 = joblib.load('model/scaler_standard.pkl')
     scaled_data1 = scaler1.transform(data_to_predict)  
 
-    scaler2 =joblib.load('model//scaler_minmax.pkl')
+    scaler2 =joblib.load('model/scaler_minmax.pkl')
     scaled_data2 = scaler2.transform(scaled_data1)
 
     input_data = np.array(scaled_data2)
